@@ -5,6 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -28,11 +29,7 @@ export default definePlugin({
     name: "MessageCorrector",
     description: "Corrects the order of messages in the chat, based on when the message reached Discord's servers.",
     settings: settings,
-
-    authors: [{
-        name: "Calebh101",
-        id: 1225628518021599264n,
-    }],
+    authors: [Devs.Calebh101],
 
     start() {
         logger.log("Started in " + (settings.store.debug ? "debug" : "standard") + "mode");
