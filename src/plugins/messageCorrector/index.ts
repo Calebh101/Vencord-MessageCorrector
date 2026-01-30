@@ -28,8 +28,8 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "MessageCorrector",
     description: "Corrects the order of messages in the chat, based on when the message reached Discord's servers.",
-    settings: settings,
     authors: [Devs.Calebh101],
+    settings: settings,
 
     start() {
         logger.log("Started in " + (settings.store.debug ? "debug" : "standard") + "mode");
