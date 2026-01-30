@@ -8,7 +8,7 @@ It works by patching the function that says what to render. Basically it's contr
 
 - -1: Placeholder
 - 0: No badge
-- >1: Unread count
+- \>1: Unread count
 
 And by patching said function which returns said number, we can manipulate what ends up showing. Hope it's useful!
 
@@ -41,8 +41,8 @@ Here's a template to get started:
 
 Discord gives us 2 variables to work with.
 
-- 'mentions': Probably all user mentions, role mentions, and ping-replies.
-- 'other': I think this are the other things like friend requests. Not too sure about this one.
+- `mentions`: Probably all user mentions, role mentions, and ping-replies.
+- `other`: I think this are the other things like friend requests. Not too sure about this one.
 
 # Authors
 
