@@ -11,7 +11,8 @@ import definePlugin, { OptionType } from "@utils/types";
 import { findByProps } from "@webpack";
 import { NotificationSettingsStore } from "@webpack/common";
 
-const debug: boolean = true;
+const enabled: boolean = true;
+const debug: boolean = false;
 const defaultNumber: number = 0;
 const logger = new Logger("NotificationBadgeControl");
 
@@ -88,15 +89,16 @@ export default definePlugin({
                 match: /0===(\i)&&(\i)&&!(\i)&&\(\i=-1\)/,
                 replace: "$1=$self.logic($1)",
             },
+            predicate: () => enabled,
         },
     ],
 
     start() {
-        if (debug) logger.log("Started in " + (debug ? "debug" : "standard") + " mode");
+        if (enabled && debug) logger.log("Started in " + (debug ? "debug" : "standard") + " mode");
     },
 
     stop() {
-        if (debug) logger.log("Stopped");
+        if (enabled && debug) logger.log("Stopped");
     },
 
     logic(totalNotifs: number): number {

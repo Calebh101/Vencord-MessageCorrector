@@ -9,6 +9,7 @@ import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 
+const enabled: boolean = true;
 const hasTimestampRegex = /-# \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
 const logger = new Logger("MessageCorrector");
 
@@ -32,11 +33,11 @@ export default definePlugin({
     settings: settings,
 
     start() {
-        logger.log("Started in " + (settings.store.debug ? "debug" : "standard") + " mode");
+        if (enabled) logger.log("Started in " + (settings.store.debug ? "debug" : "standard") + " mode");
     },
 
     stop() {
-        if (settings.store.debug) logger.log("Stopped");
+        if (enabled && settings.store.debug) logger.log("Stopped");
     },
 
     patches: [
@@ -44,8 +45,9 @@ export default definePlugin({
             find: ",showNewMessagesBar:!",
             replacement: {
                 match: /(\i)=\(0,(\w+)\.(\i)\)\(\{messages:(\w+)/,
-                replace: "$1=(0,$2.$3)({messages:$self.reorder($4S)",
+                replace: "$1=(0,$2.$3)({messages:$self.reorder($4)",
             },
+            predicate: () => enabled,
         },
     ],
 

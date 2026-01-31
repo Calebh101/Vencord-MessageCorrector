@@ -17,6 +17,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
 import { ChannelStore, GuildMemberStore, React, SelectedChannelStore, SelectedGuildStore, Tooltip, UserStore } from "@webpack/common";
 
+const enabled: boolean = true;
 const logger = new Logger("MemberLeftBadge");
 
 const settings = definePluginSettings({
@@ -166,6 +167,7 @@ export default definePlugin({
     settings: settings,
 
     start() {
+        if (!enabled) return;
         logger.debug("Started");
 
         Object.entries(indicatorLocations).forEach(([key, value]) => {
@@ -177,6 +179,8 @@ export default definePlugin({
     },
 
     stop() {
+        if (!enabled) return;
+
         Object.entries(indicatorLocations).forEach(([_, value]) => {
             logger.debug("Stopping indicator location " + value.title);
             value.onDisable();
@@ -188,9 +192,9 @@ export default definePlugin({
             find: "M0 15H2c0 1.6569",
             replacement: {
                 match: /mentionsCount:\i.+?null(?<=channel:(\i).+?)/,
-                replace: "$&,$self.render($1.id,$1.getGuildId())"
+                replace: "$&,$self.render($1.id,$1.getGuildId())",
             },
-            predicate: () => settings.store.showForThreads,
+            predicate: () => enabled && settings.store.showForThreads,
         },
     ],
 
