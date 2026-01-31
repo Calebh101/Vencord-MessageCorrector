@@ -8,8 +8,10 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import { findByProps } from "@webpack";
+import { NotificationSettingsStore } from "@webpack/common";
 
-const debug: boolean = false;
+const debug: boolean = true;
 const defaultNumber: number = 0;
 const logger = new Logger("NotificationBadgeControl");
 
@@ -81,17 +83,33 @@ export default definePlugin({
 
     patches: [
         {
-            find: "0===i&&n&&!r&&(i=-1)",
+            find: ".getDisableUnreadBadge(),",
             replacement: {
-                match: /0===i&&n&&!r&&\(i=-1\)/,
-                replace: "i=Vencord.Plugins.plugins.NotificationBadgeControl.logic(d.default.getTotalMentionCount(), u.dH([h.A, c.A]), d.default.hasAnyUnread(), p.A.getDisableUnreadBadge())",
+                match: /0===(\i)&&(\i)&&!(\i)&&\(\i=-1\)/,
+                replace: "$1=$self.logic($1)",
             },
         },
     ],
 
-    logic(mentions: number, other: number, hasUnread: boolean, disabled: boolean): number {
+    start() {
+        if (debug) logger.log("Started in " + (debug ? "debug" : "standard") + " mode");
+    },
+
+    stop() {
+        if (debug) logger.log("Stopped");
+    },
+
+    logic(totalNotifs: number): number {
+        const module = findByProps("getTotalMentionCount");
+        if (!module) return 0;
+
+        const mentions: number = module.getTotalMentionCount();
+        const hasUnread: boolean = module.hasAnyUnread();
+        const disabled: boolean = NotificationSettingsStore.getDisableUnreadBadge();
+        const other = totalNotifs - mentions;
+
         const checked = check();
-        if (debug) logger.debug("Received badge number logic call", checked, mentions, other, hasUnread, disabled, settings.store);
+        if (debug) logger.log("Received badge number logic call", checked, mentions, other, hasUnread, disabled, settings.store);
         if (!checked) return defaultNumber;
         const custom = settings.store.customLogic;
 

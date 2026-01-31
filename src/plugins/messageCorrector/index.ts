@@ -32,7 +32,7 @@ export default definePlugin({
     settings: settings,
 
     start() {
-        logger.log("Started in " + (settings.store.debug ? "debug" : "standard") + "mode");
+        logger.log("Started in " + (settings.store.debug ? "debug" : "standard") + " mode");
     },
 
     stop() {
@@ -41,10 +41,10 @@ export default definePlugin({
 
     patches: [
         {
-            find: "messageDisplayCompact:C,channelStream:S",
+            find: ",showNewMessagesBar:!",
             replacement: {
-                match: /ee=\(0,(\w+)\.Ay\)\(\{messages:(\w+)/,
-                replace: "ee=(0,$1.Ay)({messages:Vencord.Plugins.plugins.MessageCorrector.reorder($2)",
+                match: /(\i)=\(0,(\w+)\.(\i)\)\(\{messages:(\w+)/,
+                replace: "$1=(0,$2.$3)({messages:$self.reorder($4S)",
             },
         },
     ],
