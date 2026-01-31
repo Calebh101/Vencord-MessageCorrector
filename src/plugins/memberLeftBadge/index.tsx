@@ -170,7 +170,7 @@ export default definePlugin({
 
         Object.entries(indicatorLocations).forEach(([key, value]) => {
             if (settings.store[value.setting] === true) {
-                logger.log("Starting indicator location " + value.title);
+                logger.debug("Starting indicator location " + value.title);
                 value.onEnable();
             }
         });

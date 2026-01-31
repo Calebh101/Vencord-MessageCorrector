@@ -9,6 +9,7 @@ import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 
+const debug: boolean = false;
 const defaultNumber: number = 0;
 const logger = new Logger("NotificationBadgeControl");
 
@@ -90,7 +91,7 @@ export default definePlugin({
 
     logic(mentions: number, other: number, hasUnread: boolean, disabled: boolean): number {
         const checked = check();
-        logger.debug("Received badge number logic call", checked, mentions, other, hasUnread, disabled, settings.store);
+        if (debug) logger.debug("Received badge number logic call", checked, mentions, other, hasUnread, disabled, settings.store);
         if (!checked) return defaultNumber;
         const custom = settings.store.customLogic;
 
