@@ -48,17 +48,17 @@ Discord gives us 2 variables to work with.
 
 ## -1 (Unread messages)
 
-![-1](https://github.com/Vendicated/Vencord/blob/main/src/plugins/notificationBadgeControl/Screenshots/discord_-1.png)
+![-1](Screenshots/discord_-1.png)
 
 ## 0 (None)
 
-![0](https://github.com/Vendicated/Vencord/blob/main/src/plugins/notificationBadgeControl/Screenshots/discord_0.png)
+![0](Screenshots/discord_0.png)
 
 ## >0 (Unread notifications)
 
-![2](https://github.com/Vendicated/Vencord/blob/main/src/plugins/notificationBadgeControl/Screenshots/discord_2.png)
+![2](Screenshots/discord_2.png)
 
-![999](https://github.com/Vendicated/Vencord/blob/main/src/plugins/notificationBadgeControl/Screenshots/discord_999.png)
+![999](Screenshots/discord_999.png)
 
 # Authors
 

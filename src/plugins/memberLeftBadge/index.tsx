@@ -15,7 +15,7 @@ import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
-import { ChannelStore, GuildMemberStore, React, SelectedChannelStore, SelectedGuildStore, Tooltip, UserStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, GuildMemberStore, React, SelectedChannelStore, SelectedGuildStore, Tooltip, UserStore } from "@webpack/common";
 
 const logger = new Logger("MemberLeftBadge");
 
@@ -31,7 +31,7 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true,
-        hidden: true,
+        hidden: true, // Figured this was redundant
     },
     showInProfile: {
         description: "Show the badge in user profiles.",
@@ -55,6 +55,7 @@ const settings = definePluginSettings({
         description: "Render this badge on all applicable threads in the channel list. This may absolutely decimate performance (see the setting below), so it's off by default.",
         type: OptionType.BOOLEAN,
         default: false,
+        hidden: true, // Very buggy
     },
     refreshConstantly: {
         description: "Due to either Discord being dumb, or me being dumb, in order for this to work correctly, each badge in the channel list has to refresh constantly. On lower-end hardware, it might be preferable to disable this, although it might be a bit buggy.",
@@ -65,11 +66,7 @@ const settings = definePluginSettings({
 });
 
 function MemberLeftChannelBadge({ channelId, guildId, channel, creator }: { channelId: string, guildId: string, channel: Channel, creator: User; }) {
-    const memberExists = useStateFromStores(
-        [GuildMemberStore],
-        () => !!GuildMemberStore.getMember(guildId, creator.id),
-    );
-
+    const memberExists = !!GuildMemberStore.getMember(guildId, creator.id);
     if (memberExists) return null; // OP is still here
 
     return (
@@ -191,24 +188,20 @@ export default definePlugin({
             find: "M0 15H2c0 1.6569",
             replacement: {
                 match: /mentionsCount:\i.+?null(?<=channel:(\i).+?)/,
-                replace: "$&,$self.MemberLeftChannelBadge($1.id,$1.getGuildId())"
+                replace: "$&,$self.render($1.id,$1.getGuildId())"
             },
             predicate: () => settings.store.showForThreads,
         },
     ],
 
-    MemberLeftChannelBadge: (channelId: string, guildId: string) => {
+    render: (channelId: string, guildId: string) => {
         if (!settings.store.renderOnAllApplicable && SelectedChannelStore.getChannelId() !== channelId) return null;
 
         const channel = ChannelStore.getChannel(channelId);
         if (!channel) return null;
         const creatorId = channel.ownerId;
 
-        const memberExists = useStateFromStores(
-            [GuildMemberStore],
-            () => !!GuildMemberStore.getMember(guildId, creatorId),
-        );
-
+        const memberExists = !!GuildMemberStore.getMember(guildId, creatorId);
         if (memberExists) return null; // OP is still here
         const creator = UserStore.getUser(creatorId);
 
@@ -232,6 +225,6 @@ export default definePlugin({
             );
         };
 
-        return <Wrapper />;
+        return <Wrapper key={channelId + guildId} />;
     },
 });

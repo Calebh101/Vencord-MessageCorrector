@@ -11,11 +11,15 @@ This plugin is simple; it will tell you explicitly when a user has left the serv
 
 Here's an example if a message (or in this case, a bot) left the server (I booted a test bot for this):
 
-![message.png](https://github.com/Vendicated/Vencord/blob/main/src/plugins/memberLeftBadge/Screenshots/message.png)
+![message.png](Screenshots/message.png)
 
 Now, here's an example where the owner of a forum post left:
 
-![post.png](https://github.com/Vendicated/Vencord/blob/main/src/plugins/memberLeftBadge/Screenshots/post.png)
+![post.png](Screenshots/post.png)
+
+# Notes
+
+- The channel badge can be buggy at times. This is partly the way it's implemented, and partly because of Discord's nature of liking to not load things instantly.
 
 # Authors
 
