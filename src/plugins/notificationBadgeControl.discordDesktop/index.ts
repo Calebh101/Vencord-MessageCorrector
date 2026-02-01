@@ -78,7 +78,7 @@ function check(): boolean {
 
 export default definePlugin({
     name: "NotificationBadgeControl",
-    description: "Manipulate the notification badge to not be annoying.",
+    description: "Manipulate the notification badge in the system tray or dock however you want.",
     authors: [Devs.Calebh101],
     settings: settings,
 
